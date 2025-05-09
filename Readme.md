@@ -1,0 +1,1 @@
+Simple aggregator, writed on C++

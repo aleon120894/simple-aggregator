@@ -1,0 +1,8 @@
+# .gitignore
+build/          # Ignore the entire build directory
+*.o             # Ignore object files
+*.a             # Ignore static libraries
+*.so            # Ignore shared libraries
+*.dSYM          # Ignore debug symbols (macOS)
+*.exe           # Ignore executables (Windows)
+*.dll           # Ignore dynamic link libraries (Windows)
