@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Create a library for the core functionality
 add_library(aggregator_lib STATIC
     src/utils.cpp
+    src/newsfilter.cpp
+    src/newsfetcher.cpp
+    src/newsitem.cpp
 )
 
 

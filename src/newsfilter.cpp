@@ -15,7 +15,7 @@ std::vector<NewsItem> filterNews(const std::vector<NewsItem>& news, const std::s
         std::string titleLower = utils::toLower(item.title);
         std::string descriptionLower = utils::toLower(item.description);
 
-        if(titleLower.find(searchTermLower) != std::string::npos || descriptionLower.find(searchTermLower) != std::string::npros) {
+        if(titleLower.find(searchTermLower) != std::string::npos || descriptionLower.find(searchTermLower) != std::string::npos) {
             filteredNews.push_back(item);
         }
     }
