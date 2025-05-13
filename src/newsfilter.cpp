@@ -3,11 +3,11 @@
 #include <algorithm>
 
 
-std::vector<NewsItem> filterNews(const std::vector<NewsItem>& news, const std::string& searchItem)
+std::vector<NewsItem> filterNews(const std::vector<NewsItem>& news, const std::string& searchTerm)
 {
     
     std::vector<NewsItem> filteredNews;
-    std::string searchTermLower = utils::toLower(searchItem);
+    std::string searchTermLower = utils::toLower(searchTerm);
 
     for(const auto& item : news)
     {
