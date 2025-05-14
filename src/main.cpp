@@ -13,7 +13,8 @@
 #include "utils.h"
 
 
-void getNewsFromSources(const std::vector<std::string>& sources, std::vector<NewsItem>& allNews) {
+void getNewsFromSources(const std::vector<std::string>& sources, std::vector<NewsItem>& allNews) 
+{
     std::vector<std::thread> threads;
     std::mutex newsMutex;
     std::condition_variable cv;
@@ -81,7 +82,7 @@ int main() {
                 getNewsFromSources(sources, allNews);
                 displayNews(allNews);
                 break;
-            case 2: { // Added curly braces to create a new scope
+            case 2: {
                 if (allNews.empty()) {
                     std::cout << "Please fetch the news first" << std::endl;
                     break;
@@ -89,8 +90,9 @@ int main() {
                 std::cout << "Enter keyword to filter: ";
                 std::getline(std::cin, searchTerm);
                 std::cout << "Filtering news by keyword: " << searchTerm << std::endl;
-                // std::vector<NewsItem> filteredNews = filterNews(allNews, searchTerm);
-                // displayNews(filteredNews);
+                
+                std::vector<NewsItem> filteredNews = filterNews(allNews, searchTerm);
+                displayNews(filteredNews);
                 break;
             }
             case 3:
