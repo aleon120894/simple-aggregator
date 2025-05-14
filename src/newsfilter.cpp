@@ -10,8 +10,7 @@ std::vector<NewsItem> filterNews(const std::vector<NewsItem>& news, const std::s
     std::string searchTermLower = utils::toLower(searchTerm);
 
     for(const auto& item : news)
-    {
-        
+    {   
         std::string titleLower = utils::toLower(item.title);
         std::string descriptionLower = utils::toLower(item.description);
 

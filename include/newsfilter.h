@@ -5,6 +5,6 @@
 #include <string>
 #include "newsitem.h"
 
-std::vector<NewsItem> filterNews(const std::vector<NewsItem>& news, const std::string searchNews);
+std::vector<NewsItem> filterNews(const std::vector<NewsItem>& news, const std::string& searchTerm);
 
 #endif // NEWSFILTER_H
