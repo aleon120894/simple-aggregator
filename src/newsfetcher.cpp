@@ -3,29 +3,68 @@
 #include <thread>
 #include <chrono>
 
-std::vector<NewsItem> fetchNews(const std::string& source)
-{
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+#include <curl/curl.h>  // For fetching the RSS data
+#include "pugixml.hpp" // For parsing the XML
 
+
+size_t writeCallback(char* buffer, size_t size, size_t nitems, std::string* data) {
+    size_t totalSize = size * nitems;
+    data->append(buffer, totalSize);
+    return totalSize;
+}
+
+std::vector<NewsItem> fetchNews(const std::string& source) {
+    std::vector<NewsItem> newsItems;
+    std::string rssData;
+    std::string rssURL;
+
+    // 1. Get RSS Feed URL
     if (source == "War") {
-        return {
-            { "War News: Russia", "russian forces.", "https://example.com/war1", "2024-07-24" },
-            { "War News: Ukraine", "Ukrainian army defends city.", "https://example.com/war2", "2024-07-24" },
-            { "War News: Ceasefire", "Talks of ceasefire begin.", "https://example.com/war3", "2024-07-23" }
-        };
+        rssURL = "https://www.bbc.com/news/world/rss.xml"; // BBC World News
     } else if (source == "IT News") {
-        return {
-            { "IT News: New CPU Released", "Intel releases new processor.", "https://example.com/it1", "2024-07-24" },
-            { "IT News:  Vulnerability Found", "Security flaw discovered in popular library.", "https://example.com/it2", "2024-07-24" },
-            { "IT News:  Framework Update", "React 19 is now available.", "https://example.com/it3", "2024-07-23" }
-        };
+        rssURL = "https://www.wired.com/feed/rss";       // Wired
     } else if (source == "Alerts") {
-        return {
-            { "Alert: Severe Weather", "Tornado warning issued.", "https://example.com/alert1", "2024-07-24" },
-            { "Alert: Traffic Jam", "Major traffic delay on Highway 1.", "https://example.com/alert2", "2024-07-24" },
-            { "Alert:  Power Outage", "Power outage in downtown area.", "https://example.com/alert3", "2024-07-23" }
-        };
+        rssURL = "https://www.cbsnews.com/latest/rss/main"; // CBS News Top Stories
     } else {
         return {};
     }
+
+    // 2. Fetch the XML data using libcurl, handling redirects
+    CURL* curl = curl_easy_init();
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, rssURL.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &rssData);
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L); // Follow redirects
+        CURLcode res = curl_easy_perform(curl);
+        if (res != CURLE_OK) {
+            std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+            curl_easy_cleanup(curl);
+            return {};
+        }
+        curl_easy_cleanup(curl);
+    } else {
+        std::cerr << "curl_easy_init() failed" << std::endl;
+        return {};
+    }
+
+    // 3. Parse the XML data using pugixml
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_string(rssData.c_str());
+    if (!result) {
+        std::cerr << "XML parse error: " << result.description() << std::endl;
+        return {};
+    }
+
+    // 4. Extract the news items from the XML structure
+    for (pugi::xpath_node xpath_item : doc.select_nodes("//item")) {
+        pugi::xml_node item = xpath_item.node();
+        NewsItem newsItem;
+        newsItem.title = item.child_value("title");
+        newsItem.description = item.child_value("description");
+        newsItem.link = item.child_value("link");
+        newsItem.pubDate = item.child_value("pubDate");
+        newsItems.push_back(newsItem);
+    }
+    return newsItems;
 }
