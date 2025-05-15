@@ -7,6 +7,63 @@
 * C++ compiler (e.g., GCC, Clang)
 * CMake (build system)
 * Standard C++ Library
+* **libcurl** (for fetching data from RSS feeds)
+* **pugixml** (for parsing XML data from RSS feeds)
+
+
+    Before building, ensure that you have installed libcurl and pugixml.
+
+## Installation of Dependencies
+
+### libcurl
+
+* **Linux (Debian/Ubuntu):**
+
+    ```bash
+    sudo apt-get update
+    sudo apt-get install libcurl4-dev
+    ```
+
+* **macOS (Homebrew):**
+
+    ```bash
+    brew install curl
+    ```
+
+* **Windows (vcpkg):**
+
+    ```bash
+    vcpkg install curl
+    ```
+
+### pugixml
+
+* **Linux (Debian/Ubuntu):**
+
+    ```bash
+    sudo apt-get update
+    sudo apt-get install libpugixml-dev
+    ```
+
+* **macOS (Homebrew):**
+
+    ```bash
+    brew install pugixml
+    ```
+
+* **Windows (vcpkg):**
+
+    ```bash
+    vcpkg install pugixml
+    ```
+
+## Running the Application
+
+[... (Existing running instructions) ...]
+
+## Code Overview
+
+[... (Existing code overview) ...]
 
 ## Building the Project
 

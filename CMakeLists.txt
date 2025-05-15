@@ -21,6 +21,23 @@ cmake_minimum_required(VERSION 3.10)
     set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+    find_package(pugixml REQUIRED) # Find pugixml
+
+    if(pugixml_FOUND) #check if pugixml is found
+        message(STATUS "pugixml found: ${pugixml_INCLUDE_DIRS}")
+        include_directories(${pugixml_INCLUDE_DIRS}) # Add include dirs
+    else()
+        message(FATAL_ERROR "pugixml not found")
+    endif()
+
+    find_package(CURL REQUIRED) # Find libcurl
+    if(CURL_FOUND)
+        message(STATUS "libcurl found: ${CURL_LIBRARIES}")
+        include_directories(${CURL_INCLUDE_DIRS})
+    else()
+        message(FATAL_ERROR "libcurl not found")
+    endif()
+
     # Create a library for the core functionality
     add_library(aggregator_lib STATIC
         src/utils.cpp
@@ -35,7 +52,7 @@ cmake_minimum_required(VERSION 3.10)
 
     # Add executable
     add_executable(simple_aggregator src/main.cpp)
-    target_link_libraries(simple_aggregator aggregator_lib)
+    target_link_libraries(simple_aggregator aggregator_lib ${CURL_LIBRARIES} pugixml) 
 
     # Optional: Add compiler flags
     if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
