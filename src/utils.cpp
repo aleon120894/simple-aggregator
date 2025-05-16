@@ -5,6 +5,7 @@
 #include <iostream>
 
 namespace utils {
+    
     std::string toLower(const std::string& str) 
     {
         std::string result = str;

@@ -89,9 +89,9 @@ int main() {
                 }
                 std::cout << "Enter keyword to filter: ";
                 std::getline(std::cin, searchTerm);
-                std::cout << "Filtering news by keyword: " << searchTerm << std::endl;
-                
+                std::cout << "main: Filtering news by keyword: \"" << searchTerm << "\"" << std::endl; // Debug
                 std::vector<NewsItem> filteredNews = filterNews(allNews, searchTerm);
+                std::cout << "main: filterNews returned " << filteredNews.size() << " items." << std::endl; // Debug
                 displayNews(filteredNews);
                 break;
             }
